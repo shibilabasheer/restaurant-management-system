@@ -30,6 +30,7 @@ import { setUser, logout, loginAction } from './redux/slices/userSlice'; // adju
 import AllOrders from './pages/admin/AllOrders.jsx';
 import OrderDetails from './pages/OrderDetails.jsx';
 import OrdersList from './pages/OrdersList.jsx';
+import PaymentSuccess from './pages/PaymentSuccess.jsx';
 
 const router = createBrowserRouter([
   { path: '/login', element: <Login />, errorElement: <ErrorPage /> },
@@ -40,6 +41,28 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Home /> },
+    ],
+  },
+  {
+      path: 'menu',
+      element: <Layout />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          index: true,
+          element: <Menus />
+        },
+      ],
+  },
+  {
+    path: "category/:id",
+    element: <Layout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <Category />
+      },
     ],
   },
   {
@@ -145,17 +168,6 @@ const router = createBrowserRouter([
       ],
   },
   {
-      path: 'menu',
-      element: <Layout />,
-      errorElement: <ErrorPage />,
-      children: [
-        {
-          index: true,
-          element: <Menus />
-        },
-      ],
-  },
-  {
       path: 'cart',
       element: <Layout />,
       errorElement: <ErrorPage />,
@@ -189,19 +201,19 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "category/:id",
+    path: "orders/:id",
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
       {
         index: true,
-        element: <Category />
+        element: <OrderDetails />
       },
     ],
   },
   {
-    path: "orders/:id",
-    element: <Layout />,
+    path: "orderdetails/:id",
+    element: <AdminLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -218,6 +230,17 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <OrdersList />
+      },
+    ],
+  },
+  {
+    path: "/payment-success/:id",
+    element: <Layout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <PaymentSuccess />
       },
     ],
   },

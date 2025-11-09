@@ -11,6 +11,7 @@ import tableRoutes from './routes/tables.js';
 import cartRoutes from './routes/cart.js';
 import orderRoutes from './routes/orders.js';
 import reservationRoutes from './routes/reservation.js';
+import paymentRoutes from "./routes/payment.js";
 
 const app = express();
 app.use(cors());
@@ -23,6 +24,7 @@ app.use('/api/table', tableRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/cart', cartRoutes);
+app.use("/api/payments", paymentRoutes);
 
 // error handler (simple)
 app.use((err, req, res, next) => {

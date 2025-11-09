@@ -94,7 +94,7 @@ export default function AllOrders() {
               <td>{o.type}</td>
               <td className="text-capitalize">{o.status}</td>
               <td className="text-end">₹{Number(o.totalAmount || 0).toLocaleString()}</td>
-              <td><Button size="sm" variant="outline-primary" onClick={() => navigate(`/orders/${o._id}`)}>
+              <td><Button size="sm" variant="outline-primary" onClick={() => navigate(`/orderdetails/${o._id}`)}>
                   View
                   </Button>
               </td>
