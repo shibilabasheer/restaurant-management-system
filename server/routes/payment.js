@@ -54,24 +54,32 @@ router.post("/razorpay/create", protect, async (req, res) => {
 
 router.post("/razorpay/verify", protect, async (req, res) => {
   try {
-    const { razorpayPaymentId, razorpayOrderId, razorpaySignature } = req.body;
+   const { razorpayPaymentId, razorpayOrderId, razorpaySignature } = req.body;
+
+    console.log("Verify request body:", req.body);
+
     if (!razorpayPaymentId || !razorpayOrderId || !razorpaySignature) {
-      return res.status(400).json({ message: 'Missing verification payload' });
+      return res.status(400).json({ message: 'Missing verification payload', body: req.body });
     }
 
     const key_secret = process.env.RAZORPAY_KEY_SECRET;
-    if (!key_secret) {
-      console.error('RAZORPAY_KEY_SECRET missing');
-      return res.status(500).json({ message: 'Payment gateway not configured' });
-    }
-
     const body = razorpayOrderId + "|" + razorpayPaymentId;
-    const expectedSignature = crypto.createHmac("sha256", key_secret)
-                                    .update(body.toString())
-                                    .digest("hex");
+
+    const expectedSignature = crypto
+      .createHmac("sha256", key_secret)
+      .update(body.toString())
+      .digest("hex");
+
+    console.log("Expected:", expectedSignature);
+    console.log("Received:", razorpaySignature);
 
     if (expectedSignature !== razorpaySignature) {
-      return res.status(400).json({ message: 'Invalid signature' });
+      console.error("Signature mismatch");
+      return res.status(400).json({
+        message: "Invalid signature",
+        expected: expectedSignature,
+        received: razorpaySignature,
+      });
     }
 
     const cart = await Cart.findOne({ user: req.user._id }).populate("items.menu");
@@ -124,7 +132,7 @@ router.post("/razorpay/verify", protect, async (req, res) => {
     return res.json({ success: true, order: populated, payment: paymentDoc });
   } catch (err) {
     console.error("Razorpay verify error:", err);
-    return res.status(500).json({ message: "Payment verification failed" });
+    return res.status(500).json({ message:err.message });
   }
 });
 

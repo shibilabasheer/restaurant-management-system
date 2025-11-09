@@ -155,7 +155,7 @@ export default function Checkout() {
         description: 'Payment for your order',
         order_id: data.razorpayOrderId,
         handler: async function (response) {
-         console.log("Razorpay Payment success:", response);  // 👈 add this
+         console.log("Razorpay Payment success:", response);  
   try {
     const verifyPayload = {
       razorpayPaymentId: response.razorpay_payment_id,
