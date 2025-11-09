@@ -1,0 +1,24 @@
+/* Light Theme (Default) */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --navbar-bg: #dc3545; /* Bootstrap danger red */
+}
+
+/* Dark Theme */
+[data-theme='dark'] {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --navbar-bg: #212529; /* dark navbar */
+}
+
+/* Apply Theme */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
+}
+
+.navbar {
+  background-color: var(--navbar-bg) !important;
+}

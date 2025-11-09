@@ -2,18 +2,19 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const orderItemSchema = new mongoose.Schema({
-  menu: { type: Schema.Types.ObjectId, ref: 'Menu' }, 
+  menu: { type: Schema.Types.ObjectId, ref: 'Menu' },
   qty: { type: Number, default: 1 },
   price: { type: Number, required: true },
 }, { _id: false });
 
 const orderSchema = new mongoose.Schema({
-  orderNumber: { type: String, index: true, unique: true }, 
+  orderNumber: { type: String, index: true, unique: true },
   customer: { type: Schema.Types.ObjectId, ref: 'User' },
-  items: [orderItemSchema],
+  items: { type: [orderItemSchema], default: [] },
   type: { type: String, enum: ['dinein','takeaway','delivery'], default: 'dinein' },
-  tableNumber: { type: String },
+  table: { type: Schema.Types.ObjectId, ref: 'Table' },      // table ref for dinein
   deliveryAddress: {
+    building : String,
     street: String,
     city: String,
     zipcode: String
@@ -27,4 +28,4 @@ const orderSchema = new mongoose.Schema({
   payment: { type: Schema.Types.ObjectId, ref: 'Payment' },
 }, { timestamps: true });
 
-export default mongoose.model("Order", orderSchema);
+export default mongoose.model('Order', orderSchema);

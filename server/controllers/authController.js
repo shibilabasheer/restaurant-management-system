@@ -70,6 +70,25 @@ export const registerAdmin = async (req, res) => {
   }
 };
 
+export const listUsers = async (req, res) => {
+  try {
+    const users = await User.find({ role: 'customer' }, 'name email role').sort({ name: 1 });
+    return res.json(users);
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const listStaffs = async (req, res) => {
+  try {
+    const users = await User.find({ role: 'staff' }, 'name email role').sort({ name: 1 });
+    return res.json(users);
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
 
 /** Admin creates staff */
 export const adminCreateUser = async (req, res) => {
@@ -99,5 +118,56 @@ export const adminUpdateRole = async (req, res) => {
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'Usee deleted', id: user._id });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const staffDashboard = async (req, res) => {
+  try {
+    
+    const ordersQuery = {};        
+    const reservationsQuery = {}; 
+
+    const [
+      ordersCount,
+      reservationsCount,
+      latestOrders,
+      latestReservations
+    ] = await Promise.all([
+      Order.countDocuments(ordersQuery),
+      Reservation.countDocuments(reservationsQuery),
+      Order.find(ordersQuery)
+        .sort({ createdAt: -1 })
+        .limit(5)
+        .populate('customer', 'name email')
+        .populate('items.menu', 'name price image')
+        .lean(),
+      Reservation.find(reservationsQuery)
+        .sort({ date: -1 })
+        .limit(5)
+        .populate('table', 'number seats')
+        .populate('customer', 'name email phone')
+        .lean()
+    ]);
+
+    return res.json({
+      ordersCount,
+      reservationsCount,
+      latestOrders,
+      latestReservations
+    });
+  } catch (err) {
+    console.error('staffDashboard error', err);
+    return res.status(500).json({ message: 'Server error' });
   }
 };

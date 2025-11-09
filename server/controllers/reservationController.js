@@ -3,7 +3,6 @@ import Reservation from '../models/Reservation.js';
 import Table from '../models/Table.js';
 
 const SLOT_MINUTES = parseInt(process.env.SLOT_MINUTES || '60', 10);
-// If you want more than one party per table per slot, set PER_TABLE_LIMIT > 1
 const PER_TABLE_LIMIT = parseInt(process.env.PER_TABLE_LIMIT || '1', 10);
 
 export const createReservation = async (req, res) => {
@@ -57,4 +56,47 @@ export const myReservations = async (req, res) => {
     .sort('-date')
     .populate('table');
   res.json(data);
+};
+
+export const getAllReservations = async (req, res) => {
+  try {
+    const data = await Reservation.find()
+      .sort('-date')
+      .populate('table')    
+      .populate('customer', 'name email phone');
+    return res.json(data);
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const updateReservationStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    if (!status) return res.status(400).json({ message: 'status required' });
+
+    const reservation = await Reservation.findByIdAndUpdate(id, { status }, { new: true })
+      .populate('table')
+      .populate('customer', 'name email phone');
+
+    if (!reservation) return res.status(404).json({ message: 'Reservation not found' });
+    return res.json(reservation);
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const deleteReservation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const r = await Reservation.findByIdAndDelete(id);
+    if (!r) return res.status(404).json({ message: 'Reservation not found' });
+    return res.json({ message: 'Reservation deleted', id: r._id });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ message: 'Server error' });
+  }
 };

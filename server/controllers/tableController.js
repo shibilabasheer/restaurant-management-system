@@ -1,5 +1,9 @@
 
 import Table from '../models/Table.js';
+import Reservation from '../models/Reservation.js';
+
+const SLOT_MINUTES = parseInt(process.env.SLOT_MINUTES || '60', 10);
+const PER_TABLE_LIMIT = parseInt(process.env.PER_TABLE_LIMIT || '1', 10);
 
 export const listTables = async (_req, res) => {
   const tables = await Table.find().sort('number');
@@ -41,5 +45,46 @@ export const deleteTable = async (req, res) => {
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const listAvailableTables = async (req, res) => {
+  try {
+    const { date } = req.query;
+
+    if (!date) {
+      const all = await Table.find().sort('number');
+      return res.json(all);
+    }
+
+    const start = new Date(date);
+    if (Number.isNaN(start.getTime())) {
+      return res.status(400).json({ message: 'Invalid date' });
+    }
+    const end = new Date(start);
+    end.setMinutes(start.getMinutes() + SLOT_MINUTES);
+
+    const reserved = await Reservation.find({
+      date: { $gte: start, $lt: end },
+      status: { $in: ['pending', 'confirmed', 'seated'] },
+    }).lean();
+
+    const counts = {};
+    for (const r of reserved) {
+      const tid = String(r.table);
+      counts[tid] = (counts[tid] || 0) + 1;
+    }
+
+    const tables = await Table.find().sort('number').lean();
+    const available = tables.filter(t => {
+      if (!t.isAvailable) return false;
+      const c = counts[String(t._id)] || 0;
+      return c < PER_TABLE_LIMIT;
+    });
+
+    return res.json(available);
+  } catch (e) {
+    console.error('listAvailableTables error', e);
+    return res.status(500).json({ message: 'Server error' });
   }
 };

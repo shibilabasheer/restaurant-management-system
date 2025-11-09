@@ -3,9 +3,19 @@ import Cart from '../models/Cart.js';
 import Menu from '../models/Menu.js';
 
 export const getMyCart = async (req, res) => {
-  let cart = await Cart.findOne({ user: req.user._id });
-  if (!cart) cart = await Cart.create({ user: req.user._id, items: [] });
-  res.json(cart);
+  let cart = await Cart.findOne({ user: req.user._id })
+  .populate('items.menu', 'image name')
+  .lean();
+  if (!cart) return res.json({ items: [] });
+
+  const items = cart.items.map(it => ({
+    menu: it.menu ,
+    image: it.menu?.image || undefined,
+    name: it.name || it.menu?.name,
+    price: it.price,
+    qty: it.qty,
+  }));
+  res.json({ ...cart, items });
 };
 
 export const updateItem = async (req, res) => {

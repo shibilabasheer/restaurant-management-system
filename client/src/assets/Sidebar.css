@@ -1,0 +1,21 @@
+.sidebar-link {
+  border: 1px solid #dee2e6;
+  background-color: white;
+  color: #212529;
+  text-decoration: none !important; /* <-- Make sure this is present */
+  transition: all 0.2s ease;
+  display: block;
+}
+
+.sidebar-link:hover {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+  text-decoration: none;
+}
+
+.sidebar-link.active {
+  background-color: #0d6efd;
+  color: white !important;
+  border-color: #0a58ca;
+  text-decoration: none;
+}

@@ -6,7 +6,8 @@ const menuSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   category: { type: String},
   image: { type: String},
-  isActive: { type: Boolean, default: true }
+  isActive: { type: Boolean, default: true },
+  isToppick: { type: Boolean, default: false }
 },{timestamps : true});
 
 export default mongoose.model("Menu", menuSchema);
