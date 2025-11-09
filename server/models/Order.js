@@ -23,7 +23,7 @@ const orderSchema = new mongoose.Schema({
   tax: { type: Number, default: 0 },
   deliveryFee: { type: Number, default: 0 },
   totalAmount: { type: Number, required: true },
-  status: { type: String, enum: ['received','preparing','ready','out-for-delivery','delivered','cancelled','refunded'], default: 'received' },
+  status: { type: String, enum: ['received','preparing','ready','out-for-delivery','delivered','cancelled','refunded','paid'], default: 'received' },
   assignedTo: { type: Schema.Types.ObjectId, ref: 'User' },
   payment: { type: Schema.Types.ObjectId, ref: 'Payment' },
 }, { timestamps: true });
