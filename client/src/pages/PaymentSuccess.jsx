@@ -40,7 +40,7 @@ export default function PaymentSuccess() {
     <Container className="p-4">
       <Card>
         <Card.Body>
-          <h3 className="mb-3">Payment Successful 🎉</h3>
+          <h3 className="mb-3">Payment Successful</h3>
           <div><strong>Order:</strong> {order.orderNumber || order._id}</div>
           <div><strong>Status:</strong> {order.status}</div>
           <div><strong>Total:</strong> ₹{Number(order.totalAmount || 0).toFixed(2)}</div>
