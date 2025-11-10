@@ -25,8 +25,8 @@ function Login() {
       setAuthToken(token);
       dispatch(loginAction({ token, ...user }));
       toast.success("Login Successful"); 
-      if (user.role === 'admin') navigate('/menus');
-      else if (user.role === 'staff') navigate('/allorders');
+      if (user.role === 'admin') navigate('/dashboard');
+      else if (user.role === 'staff') navigate('/dashboard');
       else navigate('/');
     } catch (err) {
         const message = err?.response?.data?.message || 'Login failed';

@@ -16,7 +16,6 @@ import AllUsers from './pages/admin/AllUsers.jsx';
 import Tables from './pages/admin/Tables.jsx';
 import ReservationsList from './pages/admin/ReservationList.jsx';
 import Staffs from './pages/admin/Staffs.jsx';
-import StaffDashboard from './pages/admin/StaffDashboard.jsx';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Menu from './pages/admin/Menu.jsx';
@@ -31,6 +30,7 @@ import AllOrders from './pages/admin/AllOrders.jsx';
 import OrderDetails from './pages/OrderDetails.jsx';
 import OrdersList from './pages/OrdersList.jsx';
 import PaymentSuccess from './pages/PaymentSuccess.jsx';
+import DashboardAnalytics from './pages/admin/DashboardAnalytics.jsx';
 
 const router = createBrowserRouter([
   { path: '/login', element: <Login />, errorElement: <ErrorPage /> },
@@ -135,13 +135,13 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "staffdashboard",
+    path: "dashboard",
     element: <AdminLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
         index: true,
-        element: <StaffDashboard/>
+        element: <DashboardAnalytics/>
       },
     ],
   },

@@ -55,6 +55,10 @@ function AdminHeader() {
                 <Navbar.Collapse id="admin-navbar-nav">
                     <Nav className="ms-auto align-items-center">
 
+                        <NavLink to="/dashboard" className={linkClass}>
+                            <FaInfoCircle className="me-2" /> Dashboard
+                        </NavLink>
+
                         <NavLink to="/reservationlist" className={linkClass}>
                             <FaInfoCircle className="me-2" /> Reservations
                         </NavLink>
