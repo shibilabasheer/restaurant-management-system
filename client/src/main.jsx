@@ -31,6 +31,8 @@ import OrderDetails from './pages/OrderDetails.jsx';
 import OrdersList from './pages/OrdersList.jsx';
 import PaymentSuccess from './pages/PaymentSuccess.jsx';
 import DashboardAnalytics from './pages/admin/DashboardAnalytics.jsx';
+import About from './pages/About.jsx';
+import Contact from './pages/Contact.jsx';;
 
 const router = createBrowserRouter([
   { path: '/login', element: <Login />, errorElement: <ErrorPage /> },
@@ -51,6 +53,28 @@ const router = createBrowserRouter([
         {
           index: true,
           element: <Menus />
+        },
+      ],
+  },
+  {
+      path: 'about',
+      element: <Layout />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          index: true,
+          element: <About />
+        },
+      ],
+  },
+  {
+      path: 'contact',
+      element: <Layout />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          index: true,
+          element: <Contact />
         },
       ],
   },
